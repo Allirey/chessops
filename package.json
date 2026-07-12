@@ -53,6 +53,8 @@
   },
   "scripts": {
     "prepare": "tsc --declarationDir dist/types && tsc --outDir dist/cjs --module commonjs --declaration false",
+    "preversion": "npm run prepare && npm test",
+    "version": "grep -q \"^## v$npm_package_version$\" CHANGELOG.md || { echo \"CHANGELOG.md has no section for v$npm_package_version\"; exit 1; } && npm --prefix fuzz install --package-lock-only --ignore-scripts && npm --prefix examples install --package-lock-only --ignore-scripts && git add fuzz/package-lock.json examples/package-lock.json",
     "test": "vitest run",
     "doc": "typedoc src/types.ts src/attacks.ts src/util.ts src/squareSet.ts src/board.ts src/setup.ts src/chess.ts src/compat.ts src/debug.ts src/fen.ts src/san.ts src/transform.ts src/variant.ts src/pgn.ts",
     "lint": "eslint",
