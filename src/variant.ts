@@ -490,9 +490,6 @@ export class RacingKings extends Position {
   dests(square: Square, ctx?: Context): SquareSet {
     ctx = ctx || this.ctx();
 
-    // Kings cannot give check.
-    if (square === ctx.king) return super.dests(square, ctx);
-
     // Do not allow giving check.
     let dests = SquareSet.empty();
     for (const to of super.dests(square, ctx)) {
