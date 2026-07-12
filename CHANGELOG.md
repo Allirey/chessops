@@ -1,5 +1,14 @@
 # Changelog for chessops
 
+## v0.15.1
+
+- Fixed Racing Kings move generation where discovered check was allowed.
+- Add `emptySetup()`.
+- Add `shift{Left,Right,Down,Up}()` transformations.
+- Add missing `boardEquals()`, `setupClone()` and `setupEquals()` reexports to
+  package root.
+- Minor performance optimizations for move generation.
+
 ## v0.15.0
 
 - Update `@badrap/result` from `0.2` to `0.3`.
