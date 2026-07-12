@@ -1,4 +1,4 @@
-name: Check
+name: Build
 on:
   push:
     branches:
@@ -16,6 +16,8 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm test
+      - run: npm run lint
+      - run: npm run check-format
       - run: cd examples && npm ci
       - run: cd examples && npm run read-pgn -- example.pgn
       - run: cd fuzz && npm ci && npm run compile
@@ -26,8 +28,6 @@ jobs:
             target=$(basename "$f" .fuzz.js)
             timeout 10 node node_modules/@gitlab-org/jsfuzz "$f" "corpus/$target" || [ $? -eq 124 ]
           done
-      - run: npm run lint
-      - run: npm run check-format
   release:
     runs-on: ubuntu-latest
     needs: test
