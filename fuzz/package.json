@@ -8,8 +8,8 @@
   },
   "devDependencies": {
     "@gitlab-org/jsfuzz": "=1.2.2",
-    "esbuild": "^0.25",
-    "typescript": "^5"
+    "esbuild": "^0.28",
+    "typescript": "^6"
   },
   "scripts": {
     "compile": "find src -name '*.ts' -exec esbuild {} --bundle --outdir=dist --platform=node \\;",

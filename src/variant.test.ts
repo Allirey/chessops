@@ -1,4 +1,4 @@
-import { expect, test } from '@jest/globals';
+import { expect, test } from 'vitest';
 import { perft } from './debug.js';
 import { makeFen, parseFen } from './fen.js';
 import { makeSanAndPlay, parseSan } from './san.js';

@@ -1,5 +1,5 @@
-import { expect, jest, test } from '@jest/globals';
 import { createReadStream } from 'fs';
+import { expect, test, vi } from 'vitest';
 import { Position } from './chess.js';
 import { makeFen } from './fen.js';
 import {
@@ -27,24 +27,26 @@ interface GameCallback {
 }
 
 function testPgnFile({ fileName = '', numberOfGames = 1, allValid = true } = {}, ...callbacks: GameCallback[]) {
-  test(`pgn file - ${fileName}`, done => {
-    const stream = createReadStream(`./data/${fileName}.pgn`, { encoding: 'utf-8' });
-    const gameCallback = jest.fn((game: Game<PgnNodeData>, err: PgnError | undefined) => {
-      if (err) stream.destroy(err);
-      if (allValid) expect(err).toBe(undefined);
-      callbacks.forEach(callback => {
-        expect(callback(game, err)).toBe(undefined);
+  test(`pgn file - ${fileName}`, () =>
+    new Promise<void>((resolve, reject) => {
+      const stream = createReadStream(`./data/${fileName}.pgn`, { encoding: 'utf-8' });
+      const gameCallback = vi.fn((game: Game<PgnNodeData>, err: PgnError | undefined) => {
+        if (err) stream.destroy(err);
+        if (allValid) expect(err).toBe(undefined);
+        callbacks.forEach(callback => {
+          expect(callback(game, err)).toBe(undefined);
+        });
       });
-    });
-    const parser = new PgnParser(gameCallback, emptyHeaders);
-    stream
-      .on('data', (chunk) => parser.parse(chunk as string, { stream: true }))
-      .on('close', () => {
-        parser.parse('');
-        expect(gameCallback).toHaveBeenCalledTimes(numberOfGames);
-        done!();
-      });
-  });
+      const parser = new PgnParser(gameCallback, emptyHeaders);
+      stream
+        .on('error', reject)
+        .on('data', (chunk) => parser.parse(chunk as string, { stream: true }))
+        .on('close', () => {
+          parser.parse('');
+          expect(gameCallback).toHaveBeenCalledTimes(numberOfGames);
+          resolve();
+        });
+    }));
 }
 
 test('make pgn', () => {
@@ -110,7 +112,7 @@ test('parse headers', () => {
 });
 
 test('parse pgn', () => {
-  const callback = jest.fn((game: Game<PgnNodeData>) => {
+  const callback = vi.fn((game: Game<PgnNodeData>) => {
     expect(makePgn(game)).toBe('[Result "1-0"]\n\n1. e4 e5 2. Nf3 { foo\n  bar baz } 1-0\n');
   });
   const parser = new PgnParser(callback, emptyHeaders);

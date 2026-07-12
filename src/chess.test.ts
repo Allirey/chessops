@@ -1,4 +1,4 @@
-import { expect, test } from '@jest/globals';
+import { expect, test } from 'vitest';
 import { Castles, castlingSide, Chess, isImpossibleCheck, normalizeMove } from './chess.js';
 import { perft } from './debug.js';
 import { INITIAL_FEN, makeFen, parseFen } from './fen.js';
