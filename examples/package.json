@@ -7,8 +7,8 @@
     "chessops": "file:.."
   },
   "devDependencies": {
-    "esbuild": "^0.25",
-    "typescript": "^5"
+    "esbuild": "^0.28",
+    "typescript": "^6"
   },
   "scripts": {
     "prepare": "esbuild src/read-pgn.ts --minify --bundle --sourcemap --outdir=dist --platform=node --format=esm",
